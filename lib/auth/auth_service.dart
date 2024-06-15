@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_admin/homescreen.dart';
 import 'package:e_commerce_admin/screens/loginpage.dart';
 import 'package:e_commerce_admin/screens/otpscreen.dart';
 
@@ -49,32 +50,60 @@ class AuthRepo {
   }
 
   static Future<void> signInWithPhoneNumber(
-      BuildContext context, String verificationId, String smsCode) async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
+    BuildContext context, String verificationId, String smsCode) async {
+  try {
+    final AuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+    final UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
 
-      // Check if the user already exists in Firestore
-      DocumentSnapshot userSnapshot = await _firestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
+    // Check if the user already exists in Firestore
+    DocumentSnapshot userSnapshot = await _firestore
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .get();
 
-      if (userSnapshot.exists) {
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => const HomePage()));
-      // } else {
-        // User does not exist, navigate to ProfilePage to complete profile
-        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //   return ProfilePage(userCredential: userCredential);
-        // }));
+    if (userSnapshot.exists) {
+      // Cast the data to a Map<String, dynamic> to use containsKey
+      var userData = userSnapshot.data() as Map<String, dynamic>;
+      if (userData.containsKey('type')) {
+        // Navigate to HomePage if 'type' field exists
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
+        // Show dialog if 'type' field does not exist
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Admin Credentials Required'),
+              content: const Text('You need admin credentials to log in.'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                      return const LoginPage();
+                    },));
+                  },
+                ), 
+              ],
+            );
+          },
+        );
       }
-    } catch (e) {
-      print('Error signing in with phone number: $e');
+    } else {
+      // User does not exist, navigate to ProfilePage to complete profile
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return const LoginPage();
+      }));
     }
+  } catch (e) {
+    print('Error signing in with phone number: $e');
   }
+}
 }

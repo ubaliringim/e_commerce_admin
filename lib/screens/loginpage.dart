@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isgettingOTP =true;
       });
+      print(phoneNumber);
       AuthRepo.verifyPhoneNumber(context, phoneNumber);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Accessing theme data
+    final theme = Theme.of(context); 
     return Scaffold(
       backgroundColor: theme.colorScheme.background, // Using background color from theme
       appBar: AppBar(
@@ -107,17 +108,16 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   foregroundColor: theme.colorScheme.onPrimary,
-                ),
-                onPressed: getOTP ,  // Enable the button only if isButtonEnabled is true
-                child:  Padding(
                   padding: const EdgeInsets.all(12.0),
+                ),
+                onPressed: getOTP, 
                   child: !isgettingOTP?  const Text(
                     "Send OTP",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ) : const Center(child: CircularProgressIndicator(color: Colors.white,),),
                 ),
               ),
-            ),
+            
             const SizedBox(height: 20,),
             const Padding(
               padding: EdgeInsets.all(8.0),
