@@ -14,12 +14,15 @@ class _ProductsPageState extends State<ProductsPage> {
 
   void deleteProduct(String id) {
     setState(() {
-       db.collection("products").doc(id).delete().then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
-        );
+      db.collection("products").doc(id).delete().then(
+            (doc) => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Product deleted from database"),
+              ),
+            ),
+            onError: (e) => print("Error updating document $e"),
+          );
     });
-   
   }
 
   @override
