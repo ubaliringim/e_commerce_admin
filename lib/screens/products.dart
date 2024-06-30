@@ -1,7 +1,8 @@
+import 'package:e_commerce_admin/model/product.dart';
 import 'package:e_commerce_admin/screens/addproductpage.dart';
+import 'package:e_commerce_admin/screens/editproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
 
@@ -43,20 +44,34 @@ class _ProductsPageState extends State<ProductsPage> {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No products found'));
           }
-          final products = snapshot.data!.docs;
+          final products = snapshot.data!.docs.map((doc) {
+            return Product.fromFirestore(doc.data() as Map<String, dynamic>);
+          }).toList();
           return ListView.builder(
             itemCount: products.length,
             itemBuilder: (context, index) {
               final product = products[index];
               return ListTile(
-                title: Text(product['name']),
-                subtitle: Text(product['description']),
-                trailing: IconButton(
-                    onPressed: () {
-                      deleteProduct(product['id']);
-                    },
-                    icon: const Icon(Icons.delete)),
-                leading: Text('\$${product['price']}'),
+                title: Text(product.name),
+                subtitle: Text(product.description),
+                leading: Text('\$${product.price}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        _navigateToEditProductPage(context, product);
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        deleteProduct(product.id!);
+                      },
+                    ),
+                  ],
+                ),
               );
             },
           );
@@ -75,6 +90,13 @@ class _ProductsPageState extends State<ProductsPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddProductPage()),
+    );
+  }
+
+  void _navigateToEditProductPage(BuildContext context, Product product) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProductPage(product: product)),
     );
   }
 }
