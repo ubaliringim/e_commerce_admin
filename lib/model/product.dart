@@ -13,7 +13,7 @@ class Product {
   final String category;
   final int price;
   final String description;
-   String? id;
+  String? id;
   final String imageUrl;
   int qty; // Add qty field
 

@@ -1,4 +1,5 @@
-import 'package:e_commerce_admin/screens/products.dart';
+import 'package:e_commerce_admin/screens/orders/orderspage.dart';
+import 'package:e_commerce_admin/screens/products/productspage.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Admin"),
+          automaticallyImplyLeading: false,
         ),
         body: Row(
           children: [
@@ -50,19 +52,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Flexible(
               flex: 2,
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.cyan,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Orders",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24),
+              child: GestureDetector(
+                onTap: () {
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //   builder: (context) {
+                  //     return const OrdersPage();
+                  //   },
+                  // ));
+                },
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.cyan,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      "Orders",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ),
                   ),
                 ),
               ),

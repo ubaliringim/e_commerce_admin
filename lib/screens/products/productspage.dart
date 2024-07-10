@@ -1,6 +1,6 @@
 import 'package:e_commerce_admin/model/product.dart';
-import 'package:e_commerce_admin/screens/addproductpage.dart';
-import 'package:e_commerce_admin/screens/editproduct.dart';
+import 'package:e_commerce_admin/screens/products/addproductpage.dart';
+import 'package:e_commerce_admin/screens/products/editproduct.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class ProductsPage extends StatefulWidget {
