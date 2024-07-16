@@ -1,0 +1,15 @@
+tasks:
+  - name: Install Flutter
+    init: |
+      # Download the Flutter SDK
+      git clone https://github.com/flutter/flutter.git -b stable
+      # Add flutter to the path
+      echo 'export PATH="$PATH:/workspace/flutter/bin"' >> ~/.bashrc
+      source ~/.bashrc
+      # Enable Flutter web (optional)
+      flutter config --enable-web
+      # Accept Android licenses (optional)
+      yes | flutter doctor --android-licenses
+    command: |
+      # Check Flutter installation
+      flutter doctor
